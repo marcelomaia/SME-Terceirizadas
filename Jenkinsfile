@@ -22,6 +22,9 @@ node {
                sh 'pipenv run pytest'
                sh 'pipenv run flake8'
             }
+            stage('Coverage') {
+               publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
+            }
         }
 
     redisImage.stop()
