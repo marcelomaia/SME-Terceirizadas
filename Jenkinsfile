@@ -1,5 +1,8 @@
 node {
     checkout scm
+
+    sh 'printenv'
+
     def redisImage = docker.image('redis:5.0.5-alpine').run()
     def postgresImage = docker.image('postgres:11.2-alpine').run(
         """-e POSTGRES_DB=${env.POSTGRES_DB} \
@@ -19,11 +22,19 @@ node {
                sh 'pipenv install --dev --skip-lock'
             }
             stage('Test') {
-               sh 'pipenv run pytest'
+               sh 'pipenv run pytest --numprocesses=1'
                sh 'pipenv run flake8'
+               sh 'utility/verifica_import_relativo.sh'
                sh 'pipenv run coverage html'
             }
         }
+
+    stage('Build Image') {
+        def image = docker.build("marcelomaia/terceirizadas_backend:latest").run(
+            "python manage.py runserver --settings=config.settings.production"
+        )
+        image.stop()
+    }
 
     stage('Artifacts') {
         publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
