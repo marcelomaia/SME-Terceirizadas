@@ -24,17 +24,12 @@ node {
                sh 'pipenv run coverage html'
             }
         }
-    stage('Coverage') {
+
+    stage('Artifacts') {
         publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
+        junit 'Junit.xml'
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'Relatorio Cobertura HTML', reportTitles: ''])
     }
-
-    post {
-        always {
-            junit 'Junit.xml'
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'Relatorio Cobertura HTML', reportTitles: ''])
-        }
-    }
-
 
     redisImage.stop()
     postgresImage.stop()
