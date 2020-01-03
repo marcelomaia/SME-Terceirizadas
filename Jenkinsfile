@@ -29,12 +29,6 @@ node {
             }
         }
 
-    stage('Build Image') {
-        def image = docker.build("marcelomaia/terceirizadas_backend:latest").inside(
-            "python manage.py runserver --settings=config.settings.production"
-        )
-    }
-
     stage('Artifacts') {
         publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
         junit 'Junit.xml'
@@ -44,5 +38,8 @@ node {
     redisImage.stop()
     postgresImage.stop()
 
-    echo "${env.JOB_NAME} A build feita por ${env.GIT_COMMIT} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${GIT_BRANCH} commit msg xxxxx mais info em: ${env.JOB_DISPLAY_URL}"
+    sh 'export AUTHOR=$(git show -s --pretty=%an)'
+    sh 'export COMMIT_MSG=$(git log --format=%B -n 1)'
+
+    echo "${env.JOB_NAME} A build feita por ${env.AUTHOR} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${env.GIT_BRANCH} commit msg ${env.COMMIT_MSG} mais info em: ${env.JOB_DISPLAY_URL}"
 }
