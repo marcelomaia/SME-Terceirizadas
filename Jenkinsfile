@@ -44,8 +44,5 @@ node {
     redisImage.stop()
     postgresImage.stop()
 
-    def autor = $(git show -s --pretty=%an)
-    def commitMsg = $(git log --format=%B -n 1)
-
-    echo "${env.JOB_NAME} A build feita por ${autor} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${GIT_BRANCH} commit msg ${commitMsg} mais info em: ${env.JOB_DISPLAY_URL}"
+    echo "${env.JOB_NAME} A build feita por ${env.GIT_COMMIT} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${GIT_BRANCH} commit msg xxxxx mais info em: ${env.JOB_DISPLAY_URL}"
 }
