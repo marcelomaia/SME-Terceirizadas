@@ -38,6 +38,12 @@ node {
     redisImage.stop()
     postgresImage.stop()
 
+    post {
+        always {
+        echo "I will always execute this!..."
+        }
+    }
+    
     sh 'chmod +x ./utility/telegram_notification.sh'
     sh './utility/telegram_notification.sh'
 }
