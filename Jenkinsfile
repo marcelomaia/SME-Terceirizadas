@@ -38,6 +38,6 @@ node {
     redisImage.stop()
     postgresImage.stop()
 
-    sh 'chmod +x /utility/telegram_notification.sh'
+    sh 'chmod +x ./utility/telegram_notification.sh'
     sh './utility/telegram_notification.sh'
 }
