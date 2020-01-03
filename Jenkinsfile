@@ -38,8 +38,5 @@ node {
     redisImage.stop()
     postgresImage.stop()
 
-    sh 'export AUTHOR=$(git show -s --pretty=%an)'
-    sh 'export COMMIT_MSG=$(git log --format=%B -n 1)'
-
-    echo "${env.JOB_NAME} A build feita por ${env.AUTHOR} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${env.GIT_BRANCH} commit msg ${env.COMMIT_MSG} mais info em: ${env.JOB_DISPLAY_URL}"
+    sh './utility/telegram_notification.sh'
 }

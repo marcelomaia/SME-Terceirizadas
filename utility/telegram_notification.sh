@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+AUTHOR=$(git show -s --pretty=%an)
+COMMIT_MSG=$(git log --format=%B -n 1)
+
 # Get the token from Travis environment vars and build the bot URL:
 BOT_URL="https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage"
 
@@ -16,8 +19,9 @@ fi
 # Define send message function. parse_mode can be changed to
 # HTML, depending on how you want to format your message:
 send_msg () {
-    curl -s -X POST ${BOT_URL} -d chat_id=$TELEGRAM_CHAT_ID \
-        -d text="$1" -d parse_mode=${PARSE_MODE}
+    echo $1
+    # curl -s -X POST ${BOT_URL} -d chat_id=$TELEGRAM_CHAT_ID \
+        # -d text="$1" -d parse_mode=${PARSE_MODE}
 }
 
 # Send message to the bot with some pertinent details about the job
@@ -25,12 +29,12 @@ send_msg () {
 # characters, since they're reserved in bash
 send_msg "
 -------------------------------------
-Travis build #${TRAVIS_BUILD_NUMBER} *${build_status}*
-\`Repository:  ${TRAVIS_REPO_SLUG}\`
+Jenkins build #${env.BUILD_NUMBER} *${build_status}*
+\`Job Name:  ${env.JOB_NAME}\`
 \`Branch:      ${TRAVIS_BRANCH}\`
-\`Author:      ${AUTHOR_NAME}\`
+\`Author:      ${AUTHOR}\`
 *Commit Msg:*
-${TRAVIS_COMMIT_MESSAGE}
-[Job Log here](${TRAVIS_JOB_WEB_URL})
+${COMMIT_MSG}
+[Job Log here](${env.JOB_DISPLAY_URL})
 --------------------------------------
 "
