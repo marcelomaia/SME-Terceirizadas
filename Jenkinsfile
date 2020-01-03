@@ -30,10 +30,9 @@ node {
         }
 
     stage('Build Image') {
-        def image = docker.build("marcelomaia/terceirizadas_backend:latest").run(
+        def image = docker.build("marcelomaia/terceirizadas_backend:latest").inside(
             "python manage.py runserver --settings=config.settings.production"
         )
-        image.stop()
     }
 
     stage('Artifacts') {
@@ -44,4 +43,9 @@ node {
 
     redisImage.stop()
     postgresImage.stop()
+
+    def autor = $(git show -s --pretty=%an)
+    def commitMsg = $(git log --format=%B -n 1)
+
+    echo "${env.JOB_NAME} A build feita por ${autor} numero ${env.BUILD_NUMBER} deu ${env.BUILD_STATUS} na branch ${GIT_BRANCH} commit msg ${commitMsg} mais info em: ${env.JOB_DISPLAY_URL}"
 }
