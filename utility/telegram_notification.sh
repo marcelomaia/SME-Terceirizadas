@@ -9,6 +9,7 @@ COMMIT_MSG=$(git log --format=%B -n 1)
 # else
 #     build_status="SUCCEEDED 🤙"
 # fi
-
+# typically SUCCESS, UNSTABLE, or FAILURE. Will never be null.
+echo "${currentBuild.result}"
 echo "Jenkins build #${BUILD_NUMBER} - ${JOB_NAME} - ${AUTHOR} - ${COMMIT_MSG} - ${JOB_DISPLAY_URL} ${BUILD_STATUS} - ${BRANCH_NAME}-  ${GIT_LOCAL_BRANCH} - ${GIT_BRANCH}"
-echo "XXXX ${GIT_COMMITTER_NAME} - ${GIT_AUTHOR_NAME} - ${GIT_COMMITTER_EMAIL} - ${GIT_AUTHOR_EMAIL}"
+      Jenkins build #34 - TercTeste - Marcelo Maia - auhdsauhdsuahdsahud - https://jenkins.marcelomaia.tech/job/TercTeste/display/redirect  - -   - origin/development
