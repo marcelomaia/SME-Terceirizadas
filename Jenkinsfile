@@ -1,5 +1,6 @@
+def statusTeste = 'INDEFINIDO'
+
 pipeline {
-    def statusTeste = 'INDEFINIDO'
 
     agent any
     stages {
@@ -31,7 +32,9 @@ pipeline {
             }
             post {
                 always {
-                    statusTeste = ${currentBuild.currentResult}
+                    steps {
+                        statusTeste = ${currentBuild.currentResult}
+                    }
                     echo "STATUS DO TESTE: ${statusTeste}"
                     junit 'Junit.xml'
                     publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
