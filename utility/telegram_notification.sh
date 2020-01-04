@@ -5,6 +5,7 @@ BOT_URL="https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage"
 # Set formatting for the message. Can be either "Markdown" or "HTML"
 PARSE_MODE="Markdown"
 
+
 # typically SUCCESS, UNSTABLE, or FAILURE. Will never be null.
 if [ $1 -ne "SUCCESS" ]; then
     build_status="FAILED 👹"
