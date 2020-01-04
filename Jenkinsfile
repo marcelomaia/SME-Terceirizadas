@@ -32,7 +32,7 @@ pipeline {
             }
             post {
                 always {
-                    steps {
+                    step {
                         statusTeste = ${currentBuild.currentResult}
                     }
                     echo "STATUS DO TESTE: ${statusTeste}"
