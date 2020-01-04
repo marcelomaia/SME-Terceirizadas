@@ -1,4 +1,6 @@
 pipeline {
+    def statusTeste = 'INDEFINIDO'
+
     agent any
     stages {
         stage('Test') {
@@ -29,9 +31,11 @@ pipeline {
             }
             post {
                 always {
-                    echo "During Build result: ${currentBuild.result}"
-                    echo "During Build currentResult: ${currentBuild.currentResult}"
-                    sh "export BUILD_STATUS=${currentBuild.result}"
+                    statusTeste = ${currentBuild.currentResult}
+                    echo "STATUS DO TESTE: ${statusTeste}"
+                    junit 'Junit.xml'
+                    publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'Relatorio Cobertura HTML', reportTitles: ''])
                 }
             }
         }
@@ -39,12 +43,8 @@ pipeline {
 
     post {
         always {
-            sh 'printenv'
-            junit 'Junit.xml'
-            publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'Relatorio Cobertura HTML', reportTitles: ''])
             sh 'chmod +x ./utility/telegram_notification.sh'
-            sh './utility/telegram_notification.sh'
+            sh "./utility/telegram_notification.sh ${statusTeste}"
             }
     }
 }
