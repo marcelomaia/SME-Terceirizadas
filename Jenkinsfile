@@ -29,12 +29,16 @@ pipeline {
                     redisImage.stop()
                     postgresImage.stop()
                     // salva a situação do teste
-                    BUILD_STATUS_TESTE = currentBuild.currentResult
+                    // BUILD_STATUS_TESTE = currentBuild.currentResult
                 }
             }
             post {
                 always {
-                    echo "STATUS DO TESTE: ${BUILD_STATUS_TESTE} ${env.BUILD_STATUS_TESTE}"
+                    script {
+                        // salva a situação do teste
+                        BUILD_STATUS_TESTE = currentBuild.currentResult
+                    }
+                    echo "STATUS DO TESTE: ${BUILD_STATUS_TESTE}"
                     junit 'Junit.xml'
                     publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'Relatorio Cobertura HTML', reportTitles: ''])
