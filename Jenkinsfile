@@ -1,8 +1,8 @@
+def BUILD_STATUS_TESTE = "INDEFINIDO"
+
 pipeline {
     agent any
-    environment {
-        BUILD_STATUS_TESTE = "INDEFINIDO"
-    }
+
     stages {
         stage('Test') {
             steps {
