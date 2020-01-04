@@ -28,8 +28,6 @@ pipeline {
                         }
                     redisImage.stop()
                     postgresImage.stop()
-                    // salva a situação do teste
-                    // BUILD_STATUS_TESTE = currentBuild.currentResult
                 }
             }
             post {
@@ -50,7 +48,7 @@ pipeline {
     post {
         always {
             sh 'chmod +x ./utility/telegram_notification.sh'
-            sh "./utility/telegram_notification.sh"
+            sh "./utility/telegram_notification.sh ${BUILD_STATUS_TESTE}"
             }
     }
 }
