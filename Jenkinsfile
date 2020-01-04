@@ -29,6 +29,8 @@ pipeline {
             }
             post {
                 always {
+                    echo "During Build result: ${currentBuild.result}"
+                    echo "During Build currentResult: ${currentBuild.currentResult}"
                     sh "export BUILD_STATUS=${currentBuild.result}"
                 }
             }
