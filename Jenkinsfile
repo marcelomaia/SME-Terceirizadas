@@ -27,14 +27,18 @@ pipeline {
                     postgresImage.stop()
                 }
             }
+            post {
+                always {
+                    environment {
+                        BUILD_STATUS = ${currentBuild.result}
+                    }
+                }
+            }
         }
     }
 
     post {
         always {
-            environment {
-                BUILD_STATUS = ${currentBuild.result}
-            }
             sh 'printenv'
             junit 'Junit.xml'
             publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
