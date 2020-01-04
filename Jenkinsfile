@@ -1,4 +1,6 @@
 def BUILD_STATUS_TESTE = "INDEFINIDO"
+def STATUS_BUILD = "INDEFINIDO"
+def STATUS_PUBLISH = "INDEFINIDO"
 
 pipeline {
     agent any
@@ -46,11 +48,27 @@ pipeline {
             steps {
                 sh 'docker build -t marcelomaia/terceirizadas_backend:teste .'
             }
+            post {
+                always {
+                    script {
+                        // salva a situação da build
+                        STATUS_BUILD = currentBuild.currentResult
+                    }
+                }
+            }
         }
         stage('Publish') {
             steps {
                 withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
                     sh 'docker push marcelomaia/terceirizadas_backend:teste'
+                }
+            }
+            post {
+                always {
+                    script {
+                        // salva a situação da publish
+                        STATUS_PUBLISH = currentBuild.currentResult
+                    }
                 }
             }
         }
@@ -59,7 +77,7 @@ pipeline {
     post {
         always {
             sh 'chmod +x ./utility/telegram_notification.sh'
-            sh "./utility/telegram_notification.sh ${BUILD_STATUS_TESTE}"
+            sh "./utility/telegram_notification.sh ${BUILD_STATUS_TESTE} ${STATUS_BUILD} ${STATUS_PUBLISH}"
         }
     }
 }
