@@ -23,6 +23,8 @@ pipeline {
                             sh 'utility/verifica_import_relativo.sh'
                             sh 'pipenv run coverage html'
                         }
+                    redisImage.stop()
+                    postgresImage.stop()
                 }
                 post {
                       always {
