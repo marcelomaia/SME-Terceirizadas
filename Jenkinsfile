@@ -26,6 +26,7 @@ pipeline {
                     redisImage.stop()
                     postgresImage.stop()
                 }
+                
                 post {
                       always {
                           junit 'Junit.xml'
