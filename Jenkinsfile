@@ -29,12 +29,11 @@ pipeline {
                     redisImage.stop()
                     postgresImage.stop()
                 }
+                // salva a situação do teste
+                statusTeste = ${currentBuild.currentResult}
             }
             post {
                 always {
-                    step {
-                        statusTeste = ${currentBuild.currentResult}
-                    }
                     echo "STATUS DO TESTE: ${statusTeste}"
                     junit 'Junit.xml'
                     publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
