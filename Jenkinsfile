@@ -29,9 +29,7 @@ pipeline {
             }
             post {
                 always {
-                    environment {
-                        BUILD_STATUS = ${currentBuild.result}
-                    }
+                    sh "export BUILD_STATUS=${currentBuild.result}"
                 }
             }
         }
