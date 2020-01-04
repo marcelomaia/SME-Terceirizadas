@@ -29,7 +29,7 @@ pipeline {
                     redisImage.stop()
                     postgresImage.stop()
                     // salva a situação do teste
-                    BUILD_STATUS_TESTE = ${currentBuild.currentResult}
+                    BUILD_STATUS_TESTE = currentBuild.currentResult
                 }
             }
             post {
