@@ -32,7 +32,9 @@ pipeline {
 
     post {
         always {
-            sh "export BUILD_STATUS=${currentBuild.result}"
+            environment {
+                BUILD_STATUS = ${currentBuild.result}
+            }
             sh 'printenv'
             junit 'Junit.xml'
             publishCoverage adapters: [coberturaAdapter('coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
