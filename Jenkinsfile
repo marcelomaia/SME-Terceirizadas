@@ -1,8 +1,8 @@
-def statusTeste = 'INDEFINIDO'
-
 pipeline {
-
     agent any
+    environment {
+        BUILD_STATUS_TESTE = "INDEFINIDO"
+    }
     stages {
         stage('Test') {
             steps {
@@ -28,9 +28,9 @@ pipeline {
                         }
                     redisImage.stop()
                     postgresImage.stop()
+                    // salva a situação do teste
+                    BUILD_STATUS_TESTE = ${currentBuild.currentResult}
                 }
-                // salva a situação do teste
-                statusTeste = ${currentBuild.currentResult}
             }
             post {
                 always {
